@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .celda {
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .inicio {
+      background-color: #cce5ff !important;
+      font-weight: bold;
+    }
+
+    .fin {
+      background-color: #f8d7da !important;
+      font-weight: bold;
+    }
+
+    .ruta {
+      background-color: #d4edda !important;
+    }
+
+    #body {
+      background-color: #f3c4a1 !important;
+    }
+  </style>
+</head>
+<body class="container py-4" id="body">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="mb-4">Resultado encontrado</h1>
+      <p class="lead text-center">
+        La ruta encontrada va desde <strong>{{ inicio }}</strong> hasta <strong>{{ fin }}</strong>:
+      </p>
+
+      <table class="table table-bordered text-center">
+        <tbody>
+          {% for fila in matriz %}
+          {% set i = loop.index0 %}
+          <tr>
+            {% for valor in fila %}
+            {% set j = loop.index0 %}
+            {% set coord = (i, j) %}
+            <td class="celda 
+                  {% if coord == inicio %}inicio
+                  {% elif coord == fin %}fin
+                  {% elif ruta and coord in ruta %}ruta{% endif %}">
+              {{ valor }}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p class="text-center">
+        <strong>Pasos:</strong>
+        {% if ruta %}
+        {{ ruta|length }}
+        {% else %}
+        No se encontró una ruta posible.
+        {% endif %}
+      </p>
+      {% if ruta %}
+      <div class="list-group mb-4">
+        {% for paso in ruta %}
+        <div class="list-group-item list-group-item-action">
+          Paso {{ loop.index }}: {{ paso }}
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert-danger text-center border-black">
+        ninguna ruta encontrada desde {{ inicio }} hasta {{ fin }}.
+      </div>
+      {% endif %}
+      <a href="/" class="btn btn-primary mt-4">Volver atras</a>
+    </div>
+  </div>
+</body>
+</html>
